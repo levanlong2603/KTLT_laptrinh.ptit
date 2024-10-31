@@ -1,39 +1,30 @@
 #include<bits/stdc++.h>
-using namespace std ;
-
-#define ll long long
+using namespace std;
 
 int main(){
-    int t; cin >> t;
+    int t;
+    cin >> t;
     while(t--){
-        string s; cin >> s;
-        vector<char> v;
-        if(s.size() == 0){
-            cout << "YES\n";
-            continue;
-        }
-        int ok = 1;
-        for(int i = 0; i < s.length(); i++){
-            if(s[i] == '(' || s[i] == '[' || s[i] == '{'){
-                v.push_back(s[i]);
+        string s;
+        cin >> s;
+        stack<char> st;
+        bool ok = true;
+        for(char x : s){
+            if(x == '(' || x == '[' || x == '{'){
+                st.push(x);
             }
             else {
-                if(s[i] == ')' && v[v.size() - 1] == '('){
-                    v.pop_back();
-                }
-                else if(s[i] == ']' && v[v.size() - 1] == '['){
-                    v.pop_back();
-                }
-                else if(s[i] == '}' && v[v.size() - 1] == '{'){
-                    v.pop_back();
+                if((x == ')' && st.top() == '(') || (x == ']' && st.top() == '[') || (x == '}'&& st.top() == '{')){
+                    st.pop();
                 }
                 else {
-                    ok = 0;
+                    ok = false;
                     break;
                 }
             }
         }
-        if(ok) cout << "YES\n";
+        if(st.empty() && ok) cout << "YES\n";
         else cout << "NO\n";
     }
+    return 0;
 }
