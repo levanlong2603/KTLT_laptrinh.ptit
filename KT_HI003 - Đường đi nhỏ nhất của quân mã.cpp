@@ -1,60 +1,59 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-const int INF = 1e9;
-const vector<pair<int, int>> knight_moves = {
-    {-2, -1}, {-1, -2}, {1, -2}, {2, -1},
-    {2, 1}, {1, 2}, {-1, 2}, {-2, 1}
-};
+#define ll long long
+const int mod = 1e9+7;
 
-int bfs_knight(vector<vector<int>>& grid, int x1, int y1, int x2, int y2) {
-    int N = grid.size();
-    vector<vector<int>> dist(N, vector<int>(N, INF));
-    queue<pair<int, int>> q;
-    
-    q.push({x1, y1});
-    dist[x1][y1] = grid[x1][y1];
+int n;
+int a[105][105];
+int d[105][105];
 
-    while (!q.empty()) {
-        auto [x, y] = q.front();
-        q.pop();
+int X[] = {0, -2, -2, -1, -1, 1, 1, 2, 2};
+int Y[] = {0, -1, 1, -2, 2, -2, 2, -1, 1};
 
-        for (auto [dx, dy] : knight_moves) {
-            int nx = x + dx, ny = y + dy;
-            if (nx >= 0 && nx < N && ny >= 0 && ny < N) {
-                int new_dist = dist[x][y] + grid[nx][ny];
-                if (new_dist < dist[nx][ny]) {
-                    dist[nx][ny] = new_dist;
-                    q.push({nx, ny});
-                }
-            }
-        }
-    }
-
-    return (dist[x2][y2] == INF) ? -1 : dist[x2][y2];
+int check(int x, int y){
+	if(0 <= x && x <= n && 0 <= y && y <= n){
+		return 1;
+	}
+	return 0;
 }
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+int Min_Path(int x1, int y1, int x2, int y2){
+	queue<pair<int,int>> Q;
+	Q.push({x1, y1});
+	d[x1][y1] = a[x1][y1];
+	while(!Q.empty()){
+		int x = Q.front().first;
+		int y = Q.front().second;
+		Q.pop();
+		for(int i = 1; i <= 8; i++){
+			int xx = x + X[i];
+			int yy = y + Y[i];
+			if(check(xx, yy)){
+				if(d[x][y] + a[xx][yy] < d[xx][yy]){
+					d[xx][yy] = d[x][y] + a[xx][yy];
+					Q.push({xx, yy});
+				}
+			}
+		}
+	}
+	if(d[x2][y2] == 1e9) return -1;
+	return d[x2][y2];
+}
 
-    int t;
-    cin >> t;
-    while (t--) {
-        int N;
-        cin >> N;
-        vector<vector<int>> grid(N, vector<int>(N));
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
-                cin >> grid[i][j];
-            }
-        }
-        int x1, y1, x2, y2;
-        cin >> x1 >> y1 >> x2 >> y2;
-        x1--; y1--; x2--; y2--; // Convert to 0-based index
-
-        cout << bfs_knight(grid, x1, y1, x2, y2) << "\n";
-    }
-
-    return 0;
+int main(){
+	int t;
+	cin >> t;
+	while(t--){
+		cin >> n;
+		for(int i = 1; i <= n; i++){
+			for(int j = 1; j <= n; j++){
+				d[i][j] = 1e9;
+				cin >> a[i][j];
+			}
+		}
+		int x1, y1, x2, y2;
+		cin >> x1 >> y1 >> x2 >> y2;
+		cout << Min_Path(x1,y1,x2,y2) << endl;
+	}
 }
