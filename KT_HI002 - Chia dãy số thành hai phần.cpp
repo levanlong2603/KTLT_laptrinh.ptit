@@ -3,13 +3,13 @@ using namespace std;
 
 typedef long long ll;
 
-int maxProductOfSubsetSums(vector<int>& A) {
+int ans(vector<int>& A) {
     int N = A.size();
     int total = accumulate(A.begin(), A.end(), 0);
     int target = total / 2;
     
     bitset<100001> dp;
-    dp[0] = 1; // Có thể đạt được tổng 0
+    dp[0] = 1;
 
     for (int num : A) {
         dp |= dp << num;
@@ -29,10 +29,6 @@ int maxProductOfSubsetSums(vector<int>& A) {
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
     int t;
     cin >> t;
     while (t--) {
@@ -43,7 +39,7 @@ int main() {
             cin >> A[i];
         }
 
-        cout << maxProductOfSubsetSums(A) << endl;
+        cout << ans(A) << endl;
     }
     return 0;
 }
