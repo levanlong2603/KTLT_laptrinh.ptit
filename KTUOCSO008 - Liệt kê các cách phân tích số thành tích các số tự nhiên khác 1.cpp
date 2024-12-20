@@ -1,45 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> a;
+int n;
+vector<vector<int>> cnt;
+vector<int> v;
 
-void dequy(int i, int s, int n, vector<int>& x) {
-    if (i > n || s > n) return;
-    if (s == n) {
-        a.push_back(x);
-        return;
-    }
-    for (int k = i; k < n; ++k) {
-        if (s * k > n) return;
-        if (n % k == 0) {
-            x.push_back(k);
-            dequy(k, s * k, n, x);
-            x.pop_back();
-        }
-    }
+void Try(int n, int start){
+	if(n == 1){
+		if(v.size() > 1)
+			cnt.push_back(v);
+		return;
+	}
+	
+	for(int i = start; i <= n; i++){
+		if(n % i == 0){
+			v.push_back(i);
+			Try(n/i, i);
+			v.pop_back();
+		}
+	}
 }
 
-void phantich(int n) {
-    vector<int> x;
-    a.clear();
-    dequy(2, 1, n, x);
-}
-
-int main() {
-    int t;
-    cin >> t;
-    while (t-- > 0) {
-        int n;
-        cin >> n;
-        phantich(n);
-
-        cout << a.size() << endl;
-        for (const auto& sequence : a) {
-            for (int value : sequence) {
-                cout << value << " ";
-            }
-            cout << endl;
-        }
-    }
-    return 0;
+int main(){
+	int t;
+	cin >> t;
+	while(t--){
+		cin >> n;
+		Try(n, 2);
+		cout << cnt.size() << endl;;
+		for(auto v : cnt){
+			for(int i = 0; i < v.size(); i++){
+				cout << v[i] << ' ';
+			}
+			cout << endl;
+		}
+		cnt.clear();
+	}
 }
