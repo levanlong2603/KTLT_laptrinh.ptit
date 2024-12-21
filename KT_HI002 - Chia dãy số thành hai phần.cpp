@@ -1,45 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
+#define ll long long
+const int mod = 1e9+7;
 
-int ans(vector<int>& A) {
-    int N = A.size();
-    int total = accumulate(A.begin(), A.end(), 0);
-    int target = total / 2;
-    
-    bitset<100001> dp;
-    dp[0] = 1;
-
-    for (int num : A) {
-        dp |= dp << num;
-    }
-
-    int best = 0;
-    for (int i = target; i >= 0; --i) {
-        if (dp[i]) {
-            best = i;
-            break;
-        }
-    }
-
-    ll sum1 = best;
-    ll sum2 = total - best;
-    return sum1 * sum2;
+int ans(int a[], int n){
+	int x = 0;
+	for(int i = 0; i < n; i++){
+		x += a[i];
+	}
+	int y = x / 2;
+	bitset<100001> dp;
+	dp[0] = 1;
+	for(int i = 0; i < n; i++){
+		dp |= dp << a[i];
+	}
+	int best = 0;
+	for(int i = y; i >= 0; i--){
+		if(dp[i]){
+			best = i;
+			break;
+		}
+	}
+	int sum1 = best;
+	int sum2 = x - best;
+	return sum1 * sum2;
 }
 
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n;
-        cin >> n;
-        vector<int> A(n);
-        for (int i = 0; i < n; ++i) {
-            cin >> A[i];
-        }
-
-        cout << ans(A) << endl;
-    }
-    return 0;
+int main(){
+	int t;cin >> t;
+	while(t--){
+		int n; cin >> n;
+		int a[n];
+		for(int &x : a) cin >> x;
+		cout << ans(a, n) << endl;
+	}
 }
